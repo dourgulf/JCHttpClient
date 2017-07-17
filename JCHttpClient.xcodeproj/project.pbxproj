@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		895BED4C1F1C93AF00E1DF74 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 895BED4B1F1C93AF00E1DF74 /* main.cpp */; };
+		895BED531F1C93C300E1DF74 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 895BED521F1C93C300E1DF74 /* main.cpp */; };
+		895BED561F1C93DA00E1DF74 /* JCHttpClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 895BED551F1C93DA00E1DF74 /* JCHttpClient.cpp */; };
+		895BED591F1C99DE00E1DF74 /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 895BED581F1C99DE00E1DF74 /* libcurl.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +26,10 @@
 
 /* Begin PBXFileReference section */
 		895BED481F1C93AF00E1DF74 /* JCHttpClient */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JCHttpClient; sourceTree = BUILT_PRODUCTS_DIR; };
-		895BED4B1F1C93AF00E1DF74 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		895BED521F1C93C300E1DF74 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		895BED541F1C93DA00E1DF74 /* JCHttpClient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JCHttpClient.hpp; sourceTree = "<group>"; };
+		895BED551F1C93DA00E1DF74 /* JCHttpClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JCHttpClient.cpp; sourceTree = "<group>"; };
+		895BED581F1C99DE00E1DF74 /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				895BED591F1C99DE00E1DF74 /* libcurl.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,7 +48,9 @@
 			isa = PBXGroup;
 			children = (
 				895BED4A1F1C93AF00E1DF74 /* JCHttpClient */,
+				895BED521F1C93C300E1DF74 /* main.cpp */,
 				895BED491F1C93AF00E1DF74 /* Products */,
+				895BED571F1C99DE00E1DF74 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +65,18 @@
 		895BED4A1F1C93AF00E1DF74 /* JCHttpClient */ = {
 			isa = PBXGroup;
 			children = (
-				895BED4B1F1C93AF00E1DF74 /* main.cpp */,
+				895BED541F1C93DA00E1DF74 /* JCHttpClient.hpp */,
+				895BED551F1C93DA00E1DF74 /* JCHttpClient.cpp */,
 			);
 			path = JCHttpClient;
+			sourceTree = "<group>";
+		};
+		895BED571F1C99DE00E1DF74 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				895BED581F1C99DE00E1DF74 /* libcurl.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +136,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				895BED4C1F1C93AF00E1DF74 /* main.cpp in Sources */,
+				895BED531F1C93C300E1DF74 /* main.cpp in Sources */,
+				895BED561F1C93DA00E1DF74 /* JCHttpClient.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
