@@ -86,12 +86,21 @@ struct JCHttpPostRequest: JCHttpRequest {
  */
 struct JCHttpDownloadRequest: JCHttpRequest {
     // Download will need much time, so timeout isn't suitable for such case
-    JCHttpDownloadRequest() { resumeSize = 0; timeout = 0;}
+    JCHttpDownloadRequest() { resumeSize = 0; timeout = 0; lowSpeedLimit=-1; lowSpeedTimeout=-1;}
     
     std::string savePath;
     
     // resume from which size, normally it is the size of partial downloaded file.
     long resumeSize;
+
+    /* If the download receives less than "low speed limit" bytes/second
+     * during "low speed time" seconds, the operations is aborted.
+     * You could i.e if you have a pretty high speed connection, abort if
+     * it is less than 2000 bytes/sec during 20 seconds.
+     * 
+     */
+    long lowSpeedLimit;
+    long lowSpeedTimeout;
 };
 
 struct JCHttpResponse {

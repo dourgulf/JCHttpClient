@@ -71,7 +71,6 @@ int JCHttpClient::Request(const JCHttpRequest &request, JCHttpResponse &response
     if (request.method == JCHttpPostMethod) {
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
     }
-    // 其实不管Get还是Post都是可以传递body的，只是一般服务器都不处理Get的body而已
     if (request.body.length() > 0) {
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.c_str());
     }
@@ -146,8 +145,8 @@ int JCHttpClient::Get(const std::string &strUrl, std::string &strResponse)
 
 struct JCDownloadContextInternal {
     bool cancel;
-    bool paused;    // 标记一次停顿
-    bool unpaused;  // 标记一次恢复
+    bool paused;    // pause trigger flag
+    bool unpaused;  // unpaused trigger flag
     FILE *fp;
     CURL *curl;
     JCDownloadContext::JCDownloadProgressType onProgress;
@@ -165,7 +164,6 @@ void JCDownloadContext::cancel() {
     static_cast<JCDownloadContextInternal*>(internal)->cancel = true;
 }
 
-// 注意：不能在多线程调用curl_easy_pause，[这里有说明](https://curl.haxx.se/libcurl/c/curl_easy_pause.html)
 void JCDownloadContext::pause() {
     static_cast<JCDownloadContextInternal*>(internal)->paused = true;
 }
@@ -195,15 +193,15 @@ static int OnWriteFileProgress(void *context, curl_off_t dltotal, curl_off_t dln
     }
     else if (internalContext->paused) {    
         curl_easy_pause(internalContext->curl, CURLPAUSE_ALL);
-        // 仅生效一次
+        // apply only once
         internalContext->paused = false;
     }
     else if (internalContext->unpaused) {
         curl_easy_pause(internalContext->curl, CURLPAUSE_CONT);
-        // 仅生效一次
+        // apply only once
         internalContext->unpaused = false;
     }
-    else if (internalContext->onProgress) {
+    if (internalContext->onProgress) {
         return internalContext->onProgress(dltotal, dlnow);
     }
     return 0;
@@ -222,7 +220,7 @@ int JCHttpClient::Download(const JCHttpDownloadRequest &request, JCDownloadConte
 #endif
     curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
     
-    // 如果服务器返回错误的状态，我们就不在下载其内容了，不然，我们会得到一个错误页面内容的下载文件
+    // If server failed (status code > 400) we don't download that erro HTML page.
     curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
 
     if (request.connectTimeout > 0) {
@@ -245,7 +243,6 @@ int JCHttpClient::Download(const JCHttpDownloadRequest &request, JCDownloadConte
                 char range[64];
                 snprintf(range, sizeof(range)-1, "%ld-", resumeAt);
                 if (curl_easy_setopt(curl, CURLOPT_RANGE, range) != CURLE_OK) {
-                    // 不支持？关掉文件，重新用新建文件的方式打开
                     fclose(fp);
                     fp = fopen(request.savePath.c_str(), "wb");
                 }
@@ -290,7 +287,6 @@ int JCHttpClient::Download(const JCHttpDownloadRequest &request, JCDownloadConte
         internalContext->onProgress = context.onProgress;
     }
     
-    // 这一组相关API调用，一次性判断了
     int ret = (int)curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
     ret |= (int)curl_easy_setopt(curl, CURLOPT_XFERINFODATA, internalContext);
     ret |= (int)curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, OnWriteFileProgress);
