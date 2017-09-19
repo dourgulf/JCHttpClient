@@ -41,7 +41,7 @@ static size_t OnWriteString(void *buffer, size_t size, size_t nmemb, void *conte
 {
     std::string *str = dynamic_cast<std::string*>((std::string *)context);
     if( NULL == str || NULL == buffer ) {
-        return -1;
+        return 0;
     }
     
     char *pData = (char *)buffer;
